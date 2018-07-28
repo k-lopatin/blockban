@@ -59,7 +59,7 @@
         <textarea placeholder="Write a description..."></textarea>
     </div>
     <div class="add-card-window-btns">
-        <button class="btn btn-success">Save</button>
+        <button class="btn btn-success save-task-btn">Save</button>
         <button class="btn btn-danger">Cancel</button>
     </div>
 </div>
@@ -93,14 +93,20 @@
     <div class="project-list-search">
         <input type="text" placeholder="Find projects..." />
     </div>
-    <div class="project-list-item">
-        <a href="#">Сайт с котиками</a>
+    <div class="project-list-list">
+        <div class="project-list-item">
+            <a href="#">Сайт с котиками</a>
+        </div>
+        <div class="project-list-item">
+            <a href="#">Ремонт на даче</a>
+        </div>
     </div>
-    <div class="project-list-item">
-        <a href="#">Ремонт на даче</a>
-    </div>
+
     <div class="project-list-add-project">
         <a href="#">Create new project</a>
+        <div class="project-list-add-project-input">
+            <input type="text" placeholder="Write a name..." />
+        </div>
     </div>
 </div>
 
@@ -233,6 +239,60 @@
 <script src="js/bootstrap.js"></script>
 
 <script>
+$(document).ready(function () {
+    $('.messenger-new-messege-field textarea').keyup(function(e){
+        if(e.keyCode === 13)
+        {
+            $.ajax({
+                type: "POST",
+                url: '/send_msg.php',
+                data: {
+                    sender: 1,
+                    receiver: 2,
+                    message: $('.messenger-new-messege-field textarea').val()
+                },
+                success: function () {
+                    $('.messenger-new-messege-field textarea').val('');
+                }
+            });
+        }
+    });
+});
+
+
+$(document).ready(function () {
+   setInterval(function () {
+       $.ajax({
+           type: "GET",
+           url: '/get_msg.php',
+           data: {
+               sender: 1,
+               receiver: 2
+           },
+           success: function (res) {
+               let curr_user = 1;
+               let messages = [];
+               for (let msg of JSON.parse(res)) {
+                    if (msg.sender == curr_user) {
+                        messages.push(
+                            '<div class="message-my-message">' + msg.message + '</div>'
+                        )
+                    } else {
+                        messages.push(
+                            '<div class="message-other-message">' + msg.message + '</div>'
+                        )
+                    }
+               }
+               $('.messages').html(messages);
+           }
+       });
+   }, 1000);
+});
+
+
+</script>
+
+<script>
     $(document).ready(function () {
         let projectListOpened = false;
         $('#project-list-btn').click(function () {
@@ -263,13 +323,6 @@
             $('.card-window').hide(60);
         });
 
-        $('.board-add-card').click(function () {
-            $('.add-card-window').show(60);
-        });
-        $('.add-card-window-close').click(function () {
-            $('.add-card-window').hide(60);
-        })
-
     })
 </script>
 
@@ -279,13 +332,7 @@
 
 <script>
     document.addEventListener('scatterLoaded', scatterExtension => {
-        // Scatter will now be available from the window scope.
-        // At this stage the connection to Scatter from the application is
-        // already encrypted.
         const scatter = window.scatter;
-
-        // It is good practice to take this off the window once you have
-        // a reference to it.
         window.scatter = null;
 
         let scatterNetwork = {
@@ -295,60 +342,187 @@
             chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"
         };
 
-        // let config = {
-        //     httpEndpoint: 'http://163.172.139.34:8888',
-        //     chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
-        //     verbose: true,
-        // };
-
-        var config = {
+        let config = {
             broadcast: true,
             sign: true,
             chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
             verbose: true,
-        }
+        };
 
         let eos = scatter.eos(scatterNetwork, Eos, config);
-        console.log(eos);
-        console.log(scatter);
 
         scatter.getIdentity({
             accounts:[scatterNetwork]
         }).then(function (res) {
             let name = res.accounts[0].name;
             $('.nav-login-name').html(name);
-            eos.getCurrencyBalance('eosio.token', name, 'BBN').then(function (result) {
-                $('.nav-login-available-money').html(result[0]);
+
+            let params = {
+                json: true,
+                code: "bbn.code",
+                scope: "bbn.code",
+                table: "accounts2",
+                limit: 500
+            };
+            eos.getTableRows(params).then(function (res) {
+                for (let row of res.rows) {
+                    console.log(row);
+                    if (row.owner == name) {
+                        $('.nav-login-available-money').html(row.balance);
+                        $('.nav-login-disabled-money').html(row.lock);
+                    }
+                }
+            });
+
+            params = {
+                json: true,
+                code: "bbn.code",
+                scope: "bbn.code",
+                table: "boards2",
+                limit: 500
+            };
+            eos.getTableRows(params).then(function (res) {
+                let boards = [];
+                for (let row of res.rows) {
+                    console.log(row);
+                    if (row.owner == name) {
+                        boards.push(' <div class="project-list-item">' +
+                            '        <a href="#">' + row.name + '</a>' +
+                            '</div>')
+                    }
+                }
+                $('.project-list-list').html(boards);
+            });
+
+            params = {
+                json: true,
+                code: "bbn.code",
+                scope: "bbn.code",
+                table: "tasks2",
+                limit: 500
+            };
+            eos.getTableRows(params).then(function (res) {
+                console.log(res);
+                let tasks = {};
+                for (let row of res.rows) {
+                    if (row.status in row) {
+                        tasks[row.status].push(row);
+                    } else {
+                        tasks[row.status] = [row];
+                    }
+                }
+                console.log(tasks);
+                window.global_tasks = tasks;
+                const status_map = {
+                    0: 'ToDo',
+                    1: 'Approval',
+                    2: 'In progress',
+                    3: 'Done',
+                    4: 'Closed'
+                };
+                let statusHtml = '';
+                for (let status_id of Object.keys(status_map)) {
+                    statusHtml += '<div class="board-col">' +
+                        '<div class="board-col-title">' + status_map[status_id] +
+                        '</div>';
+
+                    if (!(status_id in tasks)) {
+                        statusHtml += '</div>';
+                        continue;
+                    }
+                    for (let card of tasks[status_id]) {
+                        statusHtml += '<div class="board-card">';
+                        statusHtml += '<div class="board-body">';
+                        statusHtml += '<div class="board-title">';
+                        statusHtml += card.name;
+                        statusHtml += '</div></div></div>';
+                    }
+
+                    if (status_id == 0) {
+                        statusHtml += '<div class="board-add-card">';
+                        statusHtml += '<a href="#">Add a card</a>';
+                        statusHtml += '</div>';
+                    }
+
+                    statusHtml += '</div>';
+                }
+                $('.board-row').html(statusHtml);
+
+                $('.board-add-card').click(function () {
+                    $('.add-card-window').show(60);
+                });
+                $('.add-card-window-close').click(function () {
+                    $('.add-card-window').hide(60);
+                })
+            });
+
+            $('.project-list-add-project-input input').keyup(function(e){
+                if(e.keyCode === 13)
+                {
+                    let new_board_name = $('.project-list-add-project-input input').val();
+                    eos.transaction(
+                        {
+                            actions: [
+                                {
+                                    account: 'bbn.code',
+                                    name: 'cboard',
+                                    authorization: [{
+                                        actor: 'tester',
+                                        permission: 'active'
+                                    }],
+                                    data: {
+                                        'owner': 'tester',
+                                        'name': new_board_name
+                                    }
+                                }
+                            ]
+                        }
+                    ).then(function () {
+                        location.reload();
+                    });
+                }
             });
         });
 
-        // let eos = Eos({
-        //
-        //     keyProvider: '5JtrE26uVRwD2o3N3FkmGiJF8wB12HvQXGLP6oUr5AkvgxT6FwV'
-        // });
+        $('.project-list-add-project a').click(function () {
+            $('.project-list-add-project-input').show();
+            return false;
+        });
 
-        // eos.transaction(
-        //     {
-        //         // ...headers,
-        //         actions: [
-        //             {
-        //                 account: 'hello.code',
-        //                 name: 'hi',
-        //                 authorization: [{
-        //                     actor: 'user',
-        //                     permission: 'active'
-        //                 }],
-        //                 data: {
-        //                     'user': 'user'
-        //                 }
-        //             }
-        //         ]
-        //     }
-        //     // options -- example: {broadcast: false}
-        // )
+        $('.save-task-btn').click(function() {
+            let board_id = <?php echo $_GET['board_id']; ?>;
+            let name = $('.add-card-window-title-input input').val();
+            let desc = $('.add-card-window-description textarea').val();
+
+            eos.transaction(
+                {
+                    actions: [
+                        {
+                            account: 'bbn.code',
+                            name: 'ctask',
+                            authorization: [{
+                                actor: 'tester',
+                                permission: 'active'
+                            }],
+                            data: {
+                                'owner': 'tester',
+                                'name': name,
+                                'description': desc,
+                                'board': board_id,
+                                'cost': 10
+                            }
+                        }
+                    ]
+                }
+            ).then(function () {
+                location.reload();
+            });
+        });
     });
 
 </script>
+
+
 
 </body>
 </html>

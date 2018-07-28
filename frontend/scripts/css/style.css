@@ -80,6 +80,7 @@ body {
     vertical-align: middle;
     font-weight: bold;
     color: #a00;
+    margin: 0 10px 0 0;
 }
 
 .clear {
@@ -176,6 +177,11 @@ body {
     color: grey;
 }
 
+.project-list-add-project-input {
+    display: none;
+    margin: 15px 0 0 0;
+}
+
 .messenger {
     display: none;
     width: 800px;
@@ -242,6 +248,8 @@ body {
 }
 .messages {
     padding: 0 0 0 30px;
+    height: calc(100% - 120px);
+    overflow: scroll;
 }
 .messages div {
     width: 400px;
@@ -386,3 +394,4 @@ body {
     display: block;
     margin: 10px 0 0 0;
 }
+
