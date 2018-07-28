@@ -1,0 +1,25 @@
+version: '3'
+services:
+    mysql:
+        image: mysql:5.6
+        ports:
+            - "3306:3306"
+        environment:
+            - MYSQL_ROOT_PASSWORD=123
+    php:
+        build: containers/php-fpm
+        ports:
+            - '9007:9000'
+        volumes:
+            - ./frontend:/var/www/interfaces:consistent
+        links:
+            - mysql
+    nginx:
+        build: containers/nginx
+        ports:
+            - '8092:80'
+        links:
+            - php
+        volumes:
+            - ./logs/nginx/:/var/log/nginx:consistent
+            - ./frontend:/var/www/interfaces:consistent

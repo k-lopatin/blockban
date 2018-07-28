@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>Agile</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le styles -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <style type="text/css">
+        body {
+            padding-top: 60px;
+            padding-bottom: 40px;
+        }
+    </style>
+    <link href="css/bootstrap-responsive.css" rel="stylesheet">
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="nav-button hamburger">
+            <a href="" id="project-list-btn">Projects</a>
+        </div>
+        <div class="nav-right">
+            <div class="nav-messages">
+                <a href="#" id="messenger-btn">Messenger</a>
+            </div>
+            <div class="nav-login">
+                <img src="img/cat.png" />
+                <a href="#">Lopatin Konstantin</a>
+            </div>
+            <div class="nav-logout">
+                <a href="/logout">Sign out</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="project-list">
+    <div class="project-list-search">
+        <input type="text" placeholder="Find projects..." />
+    </div>
+    <div class="project-list-item">
+        <a href="#">Сайт с котиками</a>
+    </div>
+    <div class="project-list-item">
+        <a href="#">Ремонт на даче</a>
+    </div>
+    <div class="project-list-add-project">
+        <a href="#">Create new project</a>
+    </div>
+</div>
+
+    <div class="board-row">
+        <div class="board-col">
+
+            <div class="board-col-title">
+                ToDo
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+
+            <div class="board-add-card">
+                <a href="#">Add a card</a>
+            </div>
+
+        </div>
+
+        <div class="board-col">
+
+            <div class="board-col-title">
+                Approval
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="board-col">
+
+            <div class="board-col-title">
+                Work
+            </div>
+
+            <div class="board-card">
+                <div class="board-body">
+                    <div class="board-title">Подготовка презентации</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="board-col">
+
+            <div class="board-col-title">
+                Acceptance
+            </div>
+        </div>
+
+        <div class="board-col">
+
+            <div class="board-col-title">
+                Arbitrage
+            </div>
+        </div>
+
+        <div class="board-col">
+
+            <div class="board-col-title">
+                Done
+            </div>
+        </div>
+    </div>
+
+    <div class="clear"></div>
+
+    <div class="messenger" id="messenger">
+        <div class="messenger-contact-list">
+            <div class="messenger-search">
+                <input type="text" placeholder="Search users..." />
+            </div>
+            <div class="messenger-contact-item"><a href="#">Andrey K</a></div>
+            <div class="messenger-contact-item"><a href="#">Yuyu Palamarchuk</a></div>
+            <div class="messenger-contact-item"><a href="#">Grue Some Bot</a></div>
+        </div>
+
+    </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.0/jquery.min.js"></script>
+<script src="js/bootstrap.js"></script>
+
+<script>
+    $(document).ready(function () {
+        let projectListOpened = false;
+        $('#project-list-btn').click(function () {
+            if (projectListOpened) {
+                $('.project-list').animate({
+                    left: -345
+                }, 200);
+            } else {
+                $('.project-list').animate({
+                    left: 0
+                }, 200);
+            }
+            projectListOpened = !projectListOpened;
+            return false;
+        });
+
+
+        $('#messenger-btn').click(function () {
+            $('#messenger').toggle(100);
+        })
+
+    })
+</script>
+
+</body>
+</html>
