@@ -21,6 +21,51 @@
 
 <body>
 
+<div class="card-window">
+    <div class="card-window-close"></div>
+    <div class="card-window-title">
+        Подготовка презентации
+    </div>
+    <div class="card-window-description">
+        Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.
+        Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона,
+        а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации
+        "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.."
+    </div>
+    <div class="card-window-description-images">
+        <img src="img/pres1.jpg" />
+        <img src="img/pres2.jpg" />
+        <img src="img/pres3.jpg" />
+    </div>
+    <div class="card-window-comments">
+        <div class="card-window-comments-title">
+            Comments:
+        </div>
+        <div class="card-window-comments-add">
+            <textarea placeholder="Write a comment..."></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="add-card-window">
+    <div class="add-card-window-close"></div>
+    <div class="add-card-window-title">
+        Create task
+    </div>
+    <div class="add-card-window-title-input">
+        <input type="text" placeholder="Write a title..." />
+    </div>
+    <div class="add-card-window-description">
+        <textarea placeholder="Write a description..."></textarea>
+    </div>
+    <div class="add-card-window-btns">
+        <button class="btn btn-success">Save</button>
+        <button class="btn btn-danger">Cancel</button>
+    </div>
+</div>
+
+
+
 <div class="navbar navbar-inverse navbar-fixed-top">
     <div class="navbar-inner">
         <div class="nav-button hamburger">
@@ -32,7 +77,9 @@
             </div>
             <div class="nav-login">
                 <img src="img/cat.png" />
-                <a href="#">Lopatin Konstantin</a>
+                <a href="#" class="nav-login-name">-</a>
+                <span class="nav-login-available-money">-</span>
+                <span class="nav-login-disabled-money">-</span>
             </div>
             <div class="nav-logout">
                 <a href="/logout">Sign out</a>
@@ -150,9 +197,34 @@
             <div class="messenger-search">
                 <input type="text" placeholder="Search users..." />
             </div>
-            <div class="messenger-contact-item"><a href="#">Andrey K</a></div>
-            <div class="messenger-contact-item"><a href="#">Yuyu Palamarchuk</a></div>
-            <div class="messenger-contact-item"><a href="#">Grue Some Bot</a></div>
+            <div class="messenger-contact-item">
+                <a href="#">
+                    <img src="img/cat2.jpg" /><span>Andrey K</span></a>
+            </div>
+            <div class="messenger-contact-item">
+                <a href="#">
+                    <img src="img/cat3.jpg" /><span>Yuyu Palamarchuk</span></a>
+            </div>
+            <div class="messenger-contact-item">
+                <a href="#">
+                    <img src="img/cat5.jpeg" /><span>Grue Some Bot</span></a>
+            </div>
+        </div>
+
+        <div class="messenger-field">
+            <div class="messages">
+                <div class="message-my-message">Привет, нужно нарисовать дизайн кухни</div>
+                <div class="message-other-message">Нужно определиться с бюджетом, цветовой палитрой.
+                    Очень важно также нарисовать желаемое расположение мебели и техники.
+                </div>
+                <div class="message-other-message">Еще нужны варианты дизайнов которые вам нравятся</div>
+                <div class="message-my-message">Все пришлю в течение завтрашнего дня</div>
+                <div class="message-my-message">Очень интересно было бы посмотреть на примеры ваших работ.
+                Было бы круто, если сможете прислать их в этот чат картинками, спасибо!</div>
+            </div>
+            <div class="messenger-new-messege-field">
+                <textarea placeholder="Type message..."></textarea>
+            </div>
         </div>
 
     </div>
@@ -180,9 +252,102 @@
 
         $('#messenger-btn').click(function () {
             $('#messenger').toggle(100);
+        });
+
+
+        $('.board-card').click(function () {
+            $('.card-window').show(60);
+        });
+
+        $('.card-window-close').click(function () {
+            $('.card-window').hide(60);
+        });
+
+        $('.board-add-card').click(function () {
+            $('.add-card-window').show(60);
+        });
+        $('.add-card-window-close').click(function () {
+            $('.add-card-window').hide(60);
         })
 
     })
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/eosjs@16.0.0/lib/eos.min.js"
+        integrity="sha512-vNyLnOEb7uFmEtVbLnyZQ9/k4zckM2Vu3jJOKq6XfWEVZG0yKcjDExVN4EQ7e3F+rePWRncMolI2xFi/3qo62A=="
+        crossorigin="anonymous"></script>
+
+<script>
+    document.addEventListener('scatterLoaded', scatterExtension => {
+        // Scatter will now be available from the window scope.
+        // At this stage the connection to Scatter from the application is
+        // already encrypted.
+        const scatter = window.scatter;
+
+        // It is good practice to take this off the window once you have
+        // a reference to it.
+        window.scatter = null;
+
+        let scatterNetwork = {
+            blockchain: 'eos',
+            host: '163.172.139.34',
+            port: '8888',
+            chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f"
+        };
+
+        // let config = {
+        //     httpEndpoint: 'http://163.172.139.34:8888',
+        //     chainId: 'cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f',
+        //     verbose: true,
+        // };
+
+        var config = {
+            broadcast: true,
+            sign: true,
+            chainId: "cf057bbfb72640471fd910bcb67639c22df9f92470936cddc1ade0e2f2e7dc4f",
+            verbose: true,
+        }
+
+        let eos = scatter.eos(scatterNetwork, Eos, config);
+        console.log(eos);
+        console.log(scatter);
+
+        scatter.getIdentity({
+            accounts:[scatterNetwork]
+        }).then(function (res) {
+            let name = res.accounts[0].name;
+            $('.nav-login-name').html(name);
+            eos.getCurrencyBalance('eosio.token', name, 'BBN').then(function (result) {
+                $('.nav-login-available-money').html(result[0]);
+            });
+        });
+
+        // let eos = Eos({
+        //
+        //     keyProvider: '5JtrE26uVRwD2o3N3FkmGiJF8wB12HvQXGLP6oUr5AkvgxT6FwV'
+        // });
+
+        // eos.transaction(
+        //     {
+        //         // ...headers,
+        //         actions: [
+        //             {
+        //                 account: 'hello.code',
+        //                 name: 'hi',
+        //                 authorization: [{
+        //                     actor: 'user',
+        //                     permission: 'active'
+        //                 }],
+        //                 data: {
+        //                     'user': 'user'
+        //                 }
+        //             }
+        //         ]
+        //     }
+        //     // options -- example: {broadcast: false}
+        // )
+    });
+
 </script>
 
 </body>

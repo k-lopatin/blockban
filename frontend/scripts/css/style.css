@@ -66,6 +66,22 @@ body {
     font-weight: bold;
 }
 
+.nav-login-available-money {
+    display: inline-block;
+    padding: 7px 0 0 0;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #8f8;
+    margin: 0 0 0 10px;
+}
+.nav-login-disabled-money {
+    display: inline-block;
+    padding: 7px 0 0 0;
+    vertical-align: middle;
+    font-weight: bold;
+    color: #a00;
+}
+
 .clear {
     clear: both;
 }
@@ -105,6 +121,10 @@ body {
     margin: 10px 0 0 15px;
 
     border-radius: 4px;
+}
+
+.board-card:hover {
+    cursor: pointer;
 }
 
 .board-title {
@@ -159,7 +179,7 @@ body {
 .messenger {
     display: none;
     width: 800px;
-    height: 1000px;
+    height: calc(100% - 40px);
     background: #fff;
     position: absolute;
     border-radius: 4px;
@@ -170,7 +190,7 @@ body {
 
 .messenger-contact-list {
     width: 250px;
-    height: 100%;
+    height: calc(100% - 20px);
     background: #F3F4F6;
     padding: 20px 5px 0 5px;
 }
@@ -178,10 +198,19 @@ body {
 .messenger-search input {
     width: 230px;
 }
-
+.messenger-contact-item img {
+    height: 45px;
+    display: inline-block;
+    margin: -10px 0 0 -30px;
+    border-radius: 45px;
+}
+.messenger-contact-item span {
+    display: inline-block;
+    margin: -5px 0 0 10px;
+}
 .messenger-contact-item a {
     width: 213px;
-    height: 30px;
+    height: 35px;
     margin: 15px 0 0 0;
     border-radius: 4px;
     background: #E6EFF7;
@@ -189,4 +218,171 @@ body {
     display: inline-block;
     padding: 10px 0 0 30px;
     color: #000;
+}
+
+.messenger-field {
+    width: 550px;
+    bottom: 0;
+    top: 0;
+    right: 0;
+    position: absolute;
+    height: 100%;
+}
+.messenger-new-messege-field {
+    bottom: 0;
+    right: 30px;
+    width: 500px;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+}
+.messenger-new-messege-field textarea {
+    height: 100px;
+    width: 500px;
+}
+.messages {
+    padding: 0 0 0 30px;
+}
+.messages div {
+    width: 400px;
+    padding: 10px;
+    border-radius: 8px;
+}
+
+.message-other-message {
+    margin: 25px 0 0 -10px;
+    background: #fdd;
+}
+.message-my-message {
+    margin: 25px 0 0 90px;
+    background: #dfd;
+}
+
+
+
+
+.card-window {
+    top: 20px;
+    left: calc(50% - 400px);
+    width: 740px;
+    min-height: 400px;
+    background: #fff;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 2000;
+    box-shadow: 0px 0px 40px -6px rgba(0,0,0,0.75);
+    padding: 20px 20px 20px 40px;
+    display: none;
+}
+.card-window-close {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 0;
+    background: url("../img/close.png") no-repeat 5px 0;
+    background-size: 10px 10px;
+}
+.card-window-close:hover {
+    cursor: pointer;
+}
+.card-window-title {
+    font-weight: bold;
+    font-size: 17px;
+}
+
+.card-window-description {
+    width: 500px;
+    margin: 20px 0 0 0;
+}
+
+.card-window-description-images {
+    width: 500px;
+    margin: 10px 0 0 0;
+}
+
+.card-window-description-images img {
+    width: 220px;
+    margin: 5px 10px;
+    display: inline-block;
+}
+
+
+.card-window-comments {
+    margin: 15px 0 0 10px;
+}
+
+.card-window-comments-title {
+    font-size: 15px;
+    font-weight: bold;
+}
+
+.card-window-comments-add textarea {
+    width: 460px;
+    margin: 10px 0 0 0;
+    height: 60px;
+}
+
+
+
+.add-card-window {
+    top: 20px;
+    left: calc(50% - 400px);
+    width: 740px;
+    min-height: 400px;
+    background: #fff;
+    border-radius: 4px;
+    position: absolute;
+    z-index: 2000;
+    box-shadow: 0 0 40px -6px rgba(0,0,0,0.75);
+    padding: 20px 20px 20px 40px;
+    display: none;
+}
+.add-card-window-close {
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    top: 15px;
+    right: 0;
+    background: url("../img/close.png") no-repeat 5px 0;
+    background-size: 10px 10px;
+}
+.add-card-window-close:hover {
+    cursor: pointer;
+}
+
+.add-card-window-title {
+    font-weight: bold;
+    font-size: 17px;
+    margin: 0 0 10px 0;
+}
+.add-card-window-title-input {
+    font-weight: bold;
+    font-size: 17px;
+}
+.add-card-window-title-input input {
+    width: 500px;
+}
+
+.add-card-window-description {
+    width: 500px;
+    margin: 10px 0 0 0;
+}
+
+.add-card-window-description textarea {
+    width: 500px;
+    height: 200px;
+}
+
+.add-card-window-btns {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 200px;
+}
+
+.add-card-window-btns button {
+    width: 150px;
+    display: block;
+    margin: 10px 0 0 0;
 }
