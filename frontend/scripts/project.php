@@ -301,7 +301,7 @@ $(document).ready(function () {
                 let boards = [];
                 for (let row of res.rows) {
                     console.log(row);
-                    if (row.owner == name) {
+                    if (row.owner == name || name in row.users) {
                         boards.push(' <div class="project-list-item">' +
                             '        <a href="/project.php?board_id=' + row.id
                              + '">' + row.name + '</a>' +
