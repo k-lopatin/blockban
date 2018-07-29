@@ -185,10 +185,9 @@ $(document).ready(function () {
                receiver: window.global_sender_name
            },
            success: function (res) {
-               let curr_user = 1;
                let messages = [];
                for (let msg of JSON.parse(res)) {
-                    if (msg.sender == curr_user) {
+                    if (msg.sender == window.global_owner) {
                         messages.push(
                             '<div class="message-my-message">' + msg.message + '</div>'
                         )
