@@ -360,7 +360,8 @@ $(document).ready(function () {
                     3: 'Done',
                     4: 'Closed',
                     6: 'Wait for arbitre',
-                    7: 'Arbitrage'
+                    7: 'Arbitrage',
+                    8: 'Arbitrage finished'
                 };
                 let statusHtml = '';
                 for (let status_id of Object.keys(status_map)) {
