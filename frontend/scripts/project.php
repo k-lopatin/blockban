@@ -28,9 +28,7 @@
     <div class="card-window-description">
     </div>
     <div class="card-window-description-images">
-        <img src="img/pres1.jpg" />
-        <img src="img/pres2.jpg" />
-        <img src="img/pres3.jpg" />
+        <img src="img/22.jpg" />
     </div>
     <div class="card-window-cost">
     </div>
