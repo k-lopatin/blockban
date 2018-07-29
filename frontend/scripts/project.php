@@ -95,6 +95,9 @@
     <div class="header-info-board-name">Test</div>
     <div class="header-info-board-owner">Owner</div>
     <div class="header-info-board-user">User</div>
+    <div class="header-info-board-add-user">
+        Add user: <input type="text" />
+    </div>
 </div>
 
 <div class="project-list">
@@ -632,6 +635,33 @@ $(document).ready(function () {
         $('.project-list-add-project a').click(function () {
             $('.project-list-add-project-input').show();
             return false;
+        });
+
+        $('.header-info-board-add-user input').keyup(function(e){
+            if (e.keyCode === 13) {
+                let user_name = $(this).val();
+                eos.transaction(
+                    {
+                        actions: [
+                            {
+                                account: 'bbn.code',
+                                name: 'auserboard',
+                                authorization: [{
+                                    actor: window.global_name,
+                                    permission: 'active'
+                                }],
+                                data: {
+                                    'owner': window.global_name,
+                                    'user': user_name,
+                                    'board': <?php echo $_GET['board_id']; ?>
+                                }
+                            }
+                        ]
+                    }
+                ).then(function () {
+                    location.reload();
+                });
+            }
         });
 
         $('.save-task-btn').click(function() {

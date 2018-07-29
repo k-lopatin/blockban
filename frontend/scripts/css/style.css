@@ -463,6 +463,17 @@ body {
     margin: 0 0 0 10px;
 }
 
+.header-info-board-add-user {
+    display: inline-block;
+    font-size: 14px;
+    color: #fff;
+    margin: 0 0 0 60px;
+}
+
+.header-info-board-add-user input {
+    margin: 0 0 0 0;
+}
+
 .header-info {
     margin: 0 0 15px 0;
 }
