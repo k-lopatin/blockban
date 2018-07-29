@@ -306,7 +306,7 @@ $(document).ready(function () {
                     console.log(row.users);
                     console.log(name);
                     console.log('=====');
-                    if (row.owner == name || name in row.users) {
+                    if (row.owner == name || name == row.users[0]) {
                         boards.push(' <div class="project-list-item">' +
                             '        <a href="/project.php?board_id=' + row.id
                              + '">' + row.name + '</a>' +
