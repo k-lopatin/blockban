@@ -441,7 +441,7 @@ $(document).ready(function () {
                                             data: {
                                                 'arbiter': window.global_name,
                                                 'task': window.global_tasks[task].id,
-                                                'desicion': true,
+                                                'desision': true,
                                                 'comment': comment
                                             }
                                         }
@@ -468,7 +468,7 @@ $(document).ready(function () {
                                             data: {
                                                 'arbiter': window.global_name,
                                                 'task': window.global_tasks[task].id,
-                                                'desicion': false,
+                                                'desision': false,
                                                 'comment': comment
                                             }
                                         }
