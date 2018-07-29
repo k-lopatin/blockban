@@ -117,18 +117,9 @@
             <div class="messenger-search">
                 <input type="text" placeholder="Search users..." />
             </div>
-            <div class="messenger-contact-item">
-                <a href="#">
-                    <img src="img/cat2.jpg" /><span>Andrey K</span></a>
+            <div class="messenger-contact-list-list">
             </div>
-            <div class="messenger-contact-item">
-                <a href="#">
-                    <img src="img/cat3.jpg" /><span>Yuyu Palamarchuk</span></a>
-            </div>
-            <div class="messenger-contact-item">
-                <a href="#">
-                    <img src="img/cat5.jpeg" /><span>Grue Some Bot</span></a>
-            </div>
+
         </div>
 
         <div class="messenger-field">
@@ -161,8 +152,8 @@ $(document).ready(function () {
                 type: "POST",
                 url: '/send_msg.php',
                 data: {
-                    sender: 1,
-                    receiver: 2,
+                    sender: window.global_owner,
+                    receiver: window.global_sender_name,
                     message: $('.messenger-new-messege-field textarea').val()
                 },
                 success: function () {
@@ -180,8 +171,8 @@ $(document).ready(function () {
            type: "GET",
            url: '/get_msg.php',
            data: {
-               sender: 1,
-               receiver: 2
+               sender: window.global_owner,
+               receiver: window.global_sender_name
            },
            success: function (res) {
                let curr_user = 1;
@@ -271,13 +262,32 @@ $(document).ready(function () {
                 limit: 500
             };
             eos.getTableRows(params).then(function (res) {
+                let message_contacts = [];
+                let i = 2;
                 for (let row of res.rows) {
                     console.log(row);
                     if (row.owner == name) {
                         $('.nav-login-available-money').html(row.balance);
                         $('.nav-login-disabled-money').html(row.lock);
+                        window.global_owner = row.owner;
+                    } else {
+                        message_contacts.push(
+                            '<div class="messenger-contact-item">' +
+                                '<a href="#" user_id="' + row.owner + '">' +
+                                    '<img src="img/cat' + i + '.jpg" /><span>' +
+                                    row.owner + '</span></a>' +
+                            '</div>'
+                        );
+                        i++;
                     }
                 }
+                $('.messenger-contact-list-list').html(message_contacts);
+
+                $('.messenger-contact-item a').click(function() {
+                    window.global_sender_name = $(this).attr('user_id');
+                    console.log(window.global_sender_name);
+                    console.log(window.global_owner);
+                });
             });
 
             params = {
