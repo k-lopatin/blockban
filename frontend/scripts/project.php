@@ -78,7 +78,7 @@
                 <a href="#" id="messenger-btn">Messenger</a>
             </div>
             <div class="nav-login">
-                <img src="img/cat.png" />
+                <img src="img/cat1.png" />
                 <a href="#" class="nav-login-name">-</a>
                 <span class="nav-login-available-money">-</span>
                 <span class="nav-login-disabled-money">-</span>
