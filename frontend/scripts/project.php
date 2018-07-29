@@ -300,12 +300,6 @@ $(document).ready(function () {
             eos.getTableRows(params).then(function (res) {
                 let boards = [];
                 for (let row of res.rows) {
-                    console.log('=====');
-                    console.log(row);
-                    console.log(name in row.users);
-                    console.log(row.users);
-                    console.log(name);
-                    console.log('=====');
                     if (row.owner == name || name == row.users[0]) {
                         boards.push(' <div class="project-list-item">' +
                             '        <a href="/project.php?board_id=' + row.id
@@ -313,6 +307,7 @@ $(document).ready(function () {
                             '</div>')
                     }
                 }
+                window.global_boards = res.rows;
                 $('.project-list-list').html(boards);
             });
 
@@ -327,6 +322,13 @@ $(document).ready(function () {
                 console.log(res);
                 let tasks = {};
                 let board_id = <?php echo $_GET['board_id']; ?>;
+
+                for (let g_board of window.global_boards) {
+                    if (g_board.id == board_id) {
+                        window.global_is_owner = window.global_owner == g_board.owner;
+                    }
+                }
+
                 for (let row of res.rows) {
                     if (row.board_id != board_id) {
                         continue;
@@ -345,9 +347,6 @@ $(document).ready(function () {
                         tasks[2] = tasks[5];
                     }
                 }
-                console.log('=======');
-                console.log(tasks);
-                console.log('=======');
 
                 window.global_tasks = res.rows;
                 const status_map = {
@@ -421,10 +420,17 @@ $(document).ready(function () {
                             }
 
                             if (window.global_tasks[task].status == 3) {
-                                $('.card-window-btns').html(
-                                    '<button class="btn btn-success confirm-btn">Confirm</button>' +
-                                    '<button class="btn btn-danger decline-btn">Decline</button>'
-                                );
+
+                                if (window.global_is_owner) {
+                                    $('.card-window-btns').html(
+                                        '<button class="btn btn-success confirm-btn">Confirm</button>' +
+                                        '<button class="btn btn-danger decline-btn">Decline</button>'
+                                    );
+                                } else {
+                                    $('.card-window-btns').html(
+                                        '<button class="btn btn-danger decline-btn">Decline</button>'
+                                    );
+                                }
                             }
 
                             if (window.global_tasks[task].status == 5) {
