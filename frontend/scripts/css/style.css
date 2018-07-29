@@ -88,7 +88,7 @@ body {
 }
 
 .board-row {
-    width: 1950px;
+    width: 2300px;
     padding: 0 0 0 50px;
 }
 
@@ -157,6 +157,18 @@ body {
     margin: 15px 0 0 20px;
     border-radius: 4px;
     background: #E6EFF7;
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 0 0 30px;
+    color: #000;
+}
+
+.project-list-arbitrage a {
+    width: 273px;
+    height: 30px;
+    margin: 15px 0 0 20px;
+    border-radius: 4px;
+    background: #f6EFF7;
     font-weight: bold;
     display: inline-block;
     padding: 10px 0 0 30px;

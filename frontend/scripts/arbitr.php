@@ -104,10 +104,6 @@
             <input type="text" placeholder="Write a name..." />
         </div>
     </div>
-
-    <div class="project-list-arbitrage">
-        <a href="/arbitr.php">Arbitrage</a>
-    </div>
 </div>
 
     <div class="board-row">
@@ -323,27 +319,15 @@ $(document).ready(function () {
                 limit: 500
             };
             eos.getTableRows(params).then(function (res) {
-                console.log(res);
                 let tasks = {};
-                let board_id = <?php echo $_GET['board_id']; ?>;
-
-                for (let g_board of window.global_boards) {
-                    if (g_board.id == board_id) {
-                        window.global_is_owner = window.global_owner == g_board.owner;
-                    }
-                }
 
                 for (let row of res.rows) {
-                    if (row.board_id != board_id) {
-                        continue;
-                    }
                     if (row.status in tasks) {
                         tasks[row.status].push(row);
                     } else {
                         tasks[row.status] = [row];
                     }
                 }
-                console.log(tasks);
                 if (5 in tasks) {
                     if (2 in tasks) {
                         tasks[2].push(...tasks[5]);
@@ -354,11 +338,6 @@ $(document).ready(function () {
 
                 window.global_tasks = res.rows;
                 const status_map = {
-                    0: 'ToDo',
-                    1: 'Approval',
-                    2: 'In progress',
-                    3: 'Done',
-                    4: 'Closed',
                     6: 'Wait for arbitre',
                     7: 'Arbitrage'
                 };
@@ -412,49 +391,30 @@ $(document).ready(function () {
                                 'Cost: ' + window.global_tasks[task].cost + ' BBN'
                             );
 
-                            if (window.global_tasks[task].status == 0) {
-                                $('.card-window-btns').html('<button class="btn btn-success accept-btn">Accept</button>');
+                            if (window.global_tasks[task].status == 6) {
+                                $('.card-window-btns').html('<button class="btn btn-success start-btn">Start</button>');
                             }
-
-                            if (window.global_tasks[task].status == 1) {
-                                $('.card-window-btns').html('<button class="btn btn-success accept2-btn">Accept</button>');
-                            }
-
-                            if (window.global_tasks[task].status == 2) {
-                                $('.card-window-btns').html('<button class="btn btn-success finish-btn">Finish</button>');
-                            }
-
-                            if (window.global_tasks[task].status == 3) {
-
-                                if (window.global_is_owner) {
-                                    $('.card-window-btns').html(
-                                        '<button class="btn btn-success confirm-btn">Confirm</button>' +
-                                        '<button class="btn btn-danger decline-btn">Decline</button>'
-                                    );
-                                }
-                            }
-
-                            if (window.global_tasks[task].status == 5) {
+                            if (window.global_tasks[task].status == 7) {
                                 $('.card-window-btns').html(
-                                    '<button class="btn btn-success finish-btn">Finish</button>' +
-                                    '<button class="btn btn-info arbitrage-btn">Arbitrage</button>'
+                                    '<button class="btn btn-success decision-ok-btn">Issue done</button>' +
+                                    '<button class="btn btn-success decision-not-ok-btn">Issue reject</button>'
                                 );
                             }
                         }
 
-                        $('.accept-btn').click(function() {
+                        $('.start-btn').click(function() {
                             eos.transaction(
                                 {
                                     actions: [
                                         {
                                             account: 'bbn.code',
-                                            name: 'accept',
+                                            name: 'addarbiter',
                                             authorization: [{
                                                 actor: window.global_name,
                                                 permission: 'active'
                                             }],
                                             data: {
-                                                'user': window.global_name,
+                                                'arbiter': window.global_name,
                                                 'task': window.global_tasks[task].id
                                             }
                                         }
@@ -465,20 +425,24 @@ $(document).ready(function () {
                             });
                         });
 
-                        $('.accept2-btn').click(function() {
+                        $('.decision-ok-btn').click(function() {
+                            let comment = $('.card-window-comments-add textarea').val();
+
                             eos.transaction(
                                 {
                                     actions: [
                                         {
                                             account: 'bbn.code',
-                                            name: 'progress',
+                                            name: 'resolve',
                                             authorization: [{
                                                 actor: window.global_name,
                                                 permission: 'active'
                                             }],
                                             data: {
-                                                'owner': window.global_name,
-                                                'task': window.global_tasks[task].id
+                                                'arbiter': window.global_name,
+                                                'task': window.global_tasks[task].id,
+                                                'desicion': true,
+                                                'comment': comment
                                             }
                                         }
                                     ]
@@ -488,89 +452,24 @@ $(document).ready(function () {
                             });
                         });
 
-                        $('.finish-btn').click(function() {
-                            eos.transaction(
-                                {
-                                    actions: [
-                                        {
-                                            account: 'bbn.code',
-                                            name: 'finish',
-                                            authorization: [{
-                                                actor: window.global_name,
-                                                permission: 'active'
-                                            }],
-                                            data: {
-                                                'user': window.global_name,
-                                                'task': window.global_tasks[task].id
-                                            }
-                                        }
-                                    ]
-                                }
-                            ).then(function () {
-                                location.reload();
-                            });
-                        });
+                        $('.decision-not-ok-btn').click(function() {
+                            let comment = $('.card-window-comments-add textarea').val();
 
-                        $('.confirm-btn').click(function() {
                             eos.transaction(
                                 {
                                     actions: [
                                         {
                                             account: 'bbn.code',
-                                            name: 'confirm',
+                                            name: 'resolve',
                                             authorization: [{
                                                 actor: window.global_name,
                                                 permission: 'active'
                                             }],
                                             data: {
-                                                'owner': window.global_name,
-                                                'task': window.global_tasks[task].id
-                                            }
-                                        }
-                                    ]
-                                }
-                            ).then(function () {
-                                location.reload();
-                            });
-                        });
-
-                        $('.decline-btn').click(function() {
-                            eos.transaction(
-                                {
-                                    actions: [
-                                        {
-                                            account: 'bbn.code',
-                                            name: 'reject',
-                                            authorization: [{
-                                                actor: window.global_name,
-                                                permission: 'active'
-                                            }],
-                                            data: {
-                                                'owner': window.global_name,
-                                                'task': window.global_tasks[task].id
-                                            }
-                                        }
-                                    ]
-                                }
-                            ).then(function () {
-                                location.reload();
-                            });
-                        });
-
-                        $('.arbitrage-btn').click(function() {
-                            eos.transaction(
-                                {
-                                    actions: [
-                                        {
-                                            account: 'bbn.code',
-                                            name: 'arbitrage',
-                                            authorization: [{
-                                                actor: window.global_name,
-                                                permission: 'active'
-                                            }],
-                                            data: {
-                                                'user': window.global_name,
-                                                'task': window.global_tasks[task].id
+                                                'arbiter': window.global_name,
+                                                'task': window.global_tasks[task].id,
+                                                'desicion': false,
+                                                'comment': comment
                                             }
                                         }
                                     ]
@@ -618,37 +517,6 @@ $(document).ready(function () {
         $('.project-list-add-project a').click(function () {
             $('.project-list-add-project-input').show();
             return false;
-        });
-
-        $('.save-task-btn').click(function() {
-            let board_id = <?php echo $_GET['board_id']; ?>;
-            let name = $('.add-card-window-title-input input').val();
-            let desc = $('.add-card-window-description textarea').val();
-            let cost = $('.add-card-window-cost input').val();
-
-            eos.transaction(
-                {
-                    actions: [
-                        {
-                            account: 'bbn.code',
-                            name: 'ctask',
-                            authorization: [{
-                                actor: window.global_name,
-                                permission: 'active'
-                            }],
-                            data: {
-                                'owner': window.global_name,
-                                'name': name,
-                                'description': desc,
-                                'board': board_id,
-                                'cost': cost
-                            }
-                        }
-                    ]
-                }
-            ).then(function () {
-                location.reload();
-            });
         });
     });
 
