@@ -8,8 +8,8 @@ $collection = $client->blockban->chat;
 $STATUS_NEW = 0;
 $STATUS_READED = 1;
 
-$receiver = $_GET['receiver'];
-$sender = $_GET['sender'];
+$receiver = isset($_GET['receiver']) ? $_GET['receiver'] : '';
+$sender = isset($_GET['sender']) ? $_GET['sender'] : '';
 
 $result = $collection->find(
     [

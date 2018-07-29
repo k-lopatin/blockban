@@ -91,6 +91,12 @@
     </div>
 </div>
 
+<div class="header-info">
+    <div class="header-info-board-name">Test</div>
+    <div class="header-info-board-owner">Owner</div>
+    <div class="header-info-board-user">User</div>
+</div>
+
 <div class="project-list">
     <div class="project-list-search">
         <input type="text" placeholder="Find projects..." />
@@ -330,6 +336,10 @@ $(document).ready(function () {
                 for (let g_board of window.global_boards) {
                     if (g_board.id == board_id) {
                         window.global_is_owner = window.global_owner == g_board.owner;
+
+                        $('.header-info-board-name').html(g_board.name);
+                        $('.header-info-board-owner').html('Owner: ' + g_board.owner);
+                        $('.header-info-board-user').html('Users: ' + g_board.users);
                     }
                 }
 
