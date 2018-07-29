@@ -426,10 +426,6 @@ $(document).ready(function () {
                                         '<button class="btn btn-success confirm-btn">Confirm</button>' +
                                         '<button class="btn btn-danger decline-btn">Decline</button>'
                                     );
-                                } else {
-                                    $('.card-window-btns').html(
-                                        '<button class="btn btn-danger decline-btn">Decline</button>'
-                                    );
                                 }
                             }
 
