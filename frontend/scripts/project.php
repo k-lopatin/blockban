@@ -379,11 +379,15 @@ $(document).ready(function () {
                         continue;
                     }
                     for (let card of tasks[status_id]) {
+                        console.log(card);
                         statusHtml += '<div class="board-card" id="' + card.id + '">';
                         statusHtml += '<div class="board-body">';
                         statusHtml += '<div class="board-title">';
                         statusHtml += card.name;
-                        statusHtml += '</div></div></div>';
+                        statusHtml += '</div>';
+                        statusHtml += '<div class="board-task-cost">' + card.cost + ' BBN</div>';
+                        statusHtml += '<div class="board-task-user">' + card.actual_executor + '</div>';
+                        statusHtml += '</div></div>';
                     }
 
                     if (status_id == 0) {
