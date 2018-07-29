@@ -300,7 +300,12 @@ $(document).ready(function () {
             eos.getTableRows(params).then(function (res) {
                 let boards = [];
                 for (let row of res.rows) {
+                    console.log('=====');
                     console.log(row);
+                    console.log(name in row.users);
+                    console.log(row.users);
+                    console.log(name);
+                    console.log('=====');
                     if (row.owner == name || name in row.users) {
                         boards.push(' <div class="project-list-item">' +
                             '        <a href="/project.php?board_id=' + row.id
