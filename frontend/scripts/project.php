@@ -42,6 +42,9 @@
     </div>
     <div class="card-window-btns">
     </div>
+    <div class="card-window-decision">
+
+    </div>
 </div>
 
 <div class="add-card-window">
@@ -448,6 +451,13 @@ $(document).ready(function () {
                                     );
                                 }
                             }
+                            if (window.global_tasks[task].status == 8) {
+                                $('.card-window-decision').html(window.global_tasks[task].desision);
+                            }
+
+                            $('.card-window-cost').html(
+                                'Cost: ' + window.global_tasks[task].cost + ' BBN'
+                            );
 
                             if (window.global_tasks[task].status == 5) {
                                 $('.card-window-btns').html(
