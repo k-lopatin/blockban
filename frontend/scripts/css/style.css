@@ -395,3 +395,22 @@ body {
     margin: 10px 0 0 0;
 }
 
+.card-window-btns {
+    position: absolute;
+    top: 30px;
+    right: 0;
+    width: 200px;
+}
+
+.card-window-btns button {
+    width: 150px;
+    display: block;
+    margin: 10px 0 0 0;
+}
+
+.card-window-cost {
+    font-size: 18px;
+    font-weight: bold;
+    color: #040;
+    margin: 15px 0 0 20px;
+}

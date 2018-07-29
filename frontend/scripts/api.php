@@ -12,9 +12,6 @@ $result = $collection->insertOne(
 
 echo $result;
 
-$STATUS_NEW = 0;
-$STATUS_READED = 1;
-
 // $method = 
 
 $result = $collection->insertOne(

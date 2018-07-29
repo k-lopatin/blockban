@@ -24,18 +24,15 @@
 <div class="card-window">
     <div class="card-window-close"></div>
     <div class="card-window-title">
-        Подготовка презентации
     </div>
     <div class="card-window-description">
-        Давно выяснено, что при оценке дизайна и композиции читаемый текст мешает сосредоточиться.
-        Lorem Ipsum используют потому, что тот обеспечивает более или менее стандартное заполнение шаблона,
-        а также реальное распределение букв и пробелов в абзацах, которое не получается при простой дубликации
-        "Здесь ваш текст.. Здесь ваш текст.. Здесь ваш текст.."
     </div>
     <div class="card-window-description-images">
         <img src="img/pres1.jpg" />
         <img src="img/pres2.jpg" />
         <img src="img/pres3.jpg" />
+    </div>
+    <div class="card-window-cost">
     </div>
     <div class="card-window-comments">
         <div class="card-window-comments-title">
@@ -44,6 +41,8 @@
         <div class="card-window-comments-add">
             <textarea placeholder="Write a comment..."></textarea>
         </div>
+    </div>
+    <div class="card-window-btns">
     </div>
 </div>
 
@@ -57,6 +56,9 @@
     </div>
     <div class="add-card-window-description">
         <textarea placeholder="Write a description..."></textarea>
+    </div>
+    <div class="add-card-window-cost">
+        <input type="number" placeholder="Write a cost of a task..." />
     </div>
     <div class="add-card-window-btns">
         <button class="btn btn-success save-task-btn">Save</button>
@@ -94,12 +96,6 @@
         <input type="text" placeholder="Find projects..." />
     </div>
     <div class="project-list-list">
-        <div class="project-list-item">
-            <a href="#">Сайт с котиками</a>
-        </div>
-        <div class="project-list-item">
-            <a href="#">Ремонт на даче</a>
-        </div>
     </div>
 
     <div class="project-list-add-project">
@@ -111,89 +107,7 @@
 </div>
 
     <div class="board-row">
-        <div class="board-col">
 
-            <div class="board-col-title">
-                ToDo
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-
-            <div class="board-add-card">
-                <a href="#">Add a card</a>
-            </div>
-
-        </div>
-
-        <div class="board-col">
-
-            <div class="board-col-title">
-                Approval
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-
-        </div>
-
-        <div class="board-col">
-
-            <div class="board-col-title">
-                Work
-            </div>
-
-            <div class="board-card">
-                <div class="board-body">
-                    <div class="board-title">Подготовка презентации</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="board-col">
-
-            <div class="board-col-title">
-                Acceptance
-            </div>
-        </div>
-
-        <div class="board-col">
-
-            <div class="board-col-title">
-                Arbitrage
-            </div>
-        </div>
-
-        <div class="board-col">
-
-            <div class="board-col-title">
-                Done
-            </div>
-        </div>
     </div>
 
     <div class="clear"></div>
@@ -314,15 +228,6 @@ $(document).ready(function () {
             $('#messenger').toggle(100);
         });
 
-
-        $('.board-card').click(function () {
-            $('.card-window').show(60);
-        });
-
-        $('.card-window-close').click(function () {
-            $('.card-window').hide(60);
-        });
-
     })
 </script>
 
@@ -355,6 +260,7 @@ $(document).ready(function () {
             accounts:[scatterNetwork]
         }).then(function (res) {
             let name = res.accounts[0].name;
+            window.global_name = name;
             $('.nav-login-name').html(name);
 
             let params = {
@@ -387,7 +293,8 @@ $(document).ready(function () {
                     console.log(row);
                     if (row.owner == name) {
                         boards.push(' <div class="project-list-item">' +
-                            '        <a href="#">' + row.name + '</a>' +
+                            '        <a href="/project.php?board_id=' + row.id
+                             + '">' + row.name + '</a>' +
                             '</div>')
                     }
                 }
@@ -404,21 +311,37 @@ $(document).ready(function () {
             eos.getTableRows(params).then(function (res) {
                 console.log(res);
                 let tasks = {};
+                let board_id = <?php echo $_GET['board_id']; ?>;
                 for (let row of res.rows) {
-                    if (row.status in row) {
+                    if (row.board_id != board_id) {
+                        continue;
+                    }
+                    if (row.status in tasks) {
                         tasks[row.status].push(row);
                     } else {
                         tasks[row.status] = [row];
                     }
                 }
                 console.log(tasks);
-                window.global_tasks = tasks;
+                if (5 in tasks) {
+                    if (2 in tasks) {
+                        tasks[2].push(...tasks[5]);
+                    } else {
+                        tasks[2] = tasks[5];
+                    }
+                }
+                console.log('=======');
+                console.log(tasks);
+                console.log('=======');
+
+                window.global_tasks = res.rows;
                 const status_map = {
                     0: 'ToDo',
                     1: 'Approval',
                     2: 'In progress',
                     3: 'Done',
-                    4: 'Closed'
+                    4: 'Closed',
+                    6: 'Wait for arbitre'
                 };
                 let statusHtml = '';
                 for (let status_id of Object.keys(status_map)) {
@@ -427,11 +350,16 @@ $(document).ready(function () {
                         '</div>';
 
                     if (!(status_id in tasks)) {
+                        if (status_id == 0) {
+                            statusHtml += '<div class="board-add-card">';
+                            statusHtml += '<a href="#">Add a card</a>';
+                            statusHtml += '</div>';
+                        }
                         statusHtml += '</div>';
                         continue;
                     }
                     for (let card of tasks[status_id]) {
-                        statusHtml += '<div class="board-card">';
+                        statusHtml += '<div class="board-card" id="' + card.id + '">';
                         statusHtml += '<div class="board-body">';
                         statusHtml += '<div class="board-title">';
                         statusHtml += card.name;
@@ -453,7 +381,188 @@ $(document).ready(function () {
                 });
                 $('.add-card-window-close').click(function () {
                     $('.add-card-window').hide(60);
-                })
+                });
+
+                $('.board-card').click(function () {
+                    $('.card-window').show(60);
+                    for (let task in window.global_tasks) {
+                        if (window.global_tasks[task].id == $(this).attr('id')) {
+                            $('.card-window-title').html(window.global_tasks[task].name);
+                            $('.card-window-description').html(window.global_tasks[task].description);
+                            $('.card-window-cost').html(
+                                'Cost: ' + window.global_tasks[task].cost + ' BBN'
+                            );
+
+                            if (window.global_tasks[task].status == 0) {
+                                $('.card-window-btns').html('<button class="btn btn-success accept-btn">Accept</button>');
+                            }
+
+                            if (window.global_tasks[task].status == 1) {
+                                $('.card-window-btns').html('<button class="btn btn-success accept2-btn">Accept</button>');
+                            }
+
+                            if (window.global_tasks[task].status == 2) {
+                                $('.card-window-btns').html('<button class="btn btn-success finish-btn">Finish</button>');
+                            }
+
+                            if (window.global_tasks[task].status == 3) {
+                                $('.card-window-btns').html(
+                                    '<button class="btn btn-success confirm-btn">Confirm</button>' +
+                                    '<button class="btn btn-danger decline-btn">Decline</button>'
+                                );
+                            }
+
+                            if (window.global_tasks[task].status == 5) {
+                                $('.card-window-btns').html(
+                                    '<button class="btn btn-success finish-btn">Finish</button>' +
+                                    '<button class="btn btn-info arbitrage-btn">Arbitrage</button>'
+                                );
+                            }
+                        }
+
+                        $('.accept-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'accept',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'user': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+
+                        $('.accept2-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'progress',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'owner': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+
+                        $('.finish-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'finish',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'user': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+
+                        $('.confirm-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'confirm',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'owner': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+
+                        $('.decline-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'reject',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'owner': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+
+                        $('.arbitrage-btn').click(function() {
+                            eos.transaction(
+                                {
+                                    actions: [
+                                        {
+                                            account: 'bbn.code',
+                                            name: 'arbitrage',
+                                            authorization: [{
+                                                actor: window.global_name,
+                                                permission: 'active'
+                                            }],
+                                            data: {
+                                                'user': window.global_name,
+                                                'task': window.global_tasks[task].id
+                                            }
+                                        }
+                                    ]
+                                }
+                            ).then(function () {
+                                location.reload();
+                            });
+                        });
+                    }
+                });
+
+                $('.card-window-close').click(function () {
+                    $('.card-window').hide(60);
+                });
             });
 
             $('.project-list-add-project-input input').keyup(function(e){
@@ -467,11 +576,11 @@ $(document).ready(function () {
                                     account: 'bbn.code',
                                     name: 'cboard',
                                     authorization: [{
-                                        actor: 'tester',
+                                        actor: window.global_name,
                                         permission: 'active'
                                     }],
                                     data: {
-                                        'owner': 'tester',
+                                        'owner': window.global_name,
                                         'name': new_board_name
                                     }
                                 }
@@ -493,6 +602,7 @@ $(document).ready(function () {
             let board_id = <?php echo $_GET['board_id']; ?>;
             let name = $('.add-card-window-title-input input').val();
             let desc = $('.add-card-window-description textarea').val();
+            let cost = $('.add-card-window-cost input').val();
 
             eos.transaction(
                 {
@@ -501,15 +611,15 @@ $(document).ready(function () {
                             account: 'bbn.code',
                             name: 'ctask',
                             authorization: [{
-                                actor: 'tester',
+                                actor: window.global_name,
                                 permission: 'active'
                             }],
                             data: {
-                                'owner': 'tester',
+                                'owner': window.global_name,
                                 'name': name,
                                 'description': desc,
                                 'board': board_id,
-                                'cost': 10
+                                'cost': cost
                             }
                         }
                     ]
