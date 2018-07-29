@@ -412,15 +412,15 @@ $(document).ready(function () {
                                 'Cost: ' + window.global_tasks[task].cost + ' BBN'
                             );
 
-                            if (window.global_tasks[task].status == 0) {
+                            if (window.global_tasks[task].status == 0 && !window.global_is_owner) {
                                 $('.card-window-btns').html('<button class="btn btn-success accept-btn">Accept</button>');
                             }
 
-                            if (window.global_tasks[task].status == 1) {
+                            if (window.global_tasks[task].status == 1 && window.global_is_owner) {
                                 $('.card-window-btns').html('<button class="btn btn-success accept2-btn">Accept</button>');
                             }
 
-                            if (window.global_tasks[task].status == 2) {
+                            if (window.global_tasks[task].status == 2 && !window.global_is_owner) {
                                 $('.card-window-btns').html('<button class="btn btn-success finish-btn">Finish</button>');
                             }
 
